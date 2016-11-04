@@ -112,9 +112,8 @@ module.exports = () => {
         return body;
     }
 
-    const colors = [ '#F44336', '#9C27B0', '#3F51B5', '#2196F3', '#00BCD4', '#009688',
-                     '#8BC34A', '#FFEB3B', '#FFB300', '#FF5722', '#795548', '#607D8B',
-                     '#E91E63', '#673AB7', '#03A9F4', '#4CAF50', '#DCE77', '#FFF9C4', '#FB8C00' ];
+    const colors = [ '#8BC34A', '#03A9F4', '#FFEB3B', '#FF5722', '#9C27B0', '#795548', '#E91E63', '#3F51B5', '#F44336', '#009688',
+                     '#2196F3', '#00BCD4', '#673AB7', '#4CAF50', '#DCE77', '#FFF9C4', '#FB8C00', '#FFB300', '#607D8B' ];
     const othersColor = '#9E9E9E';
 
     function parseItems( buckets, labelField, keyField, total ) {
