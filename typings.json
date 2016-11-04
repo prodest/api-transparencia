@@ -1,0 +1,7 @@
+{
+  "globalDependencies": {
+    "elasticsearch": "registry:dt/elasticsearch#0.0.0+20160928140154",
+    "express": "registry:dt/express#4.0.0+20160708185218",
+    "node": "registry:dt/node#6.0.0+20160802155038"
+  }
+}
