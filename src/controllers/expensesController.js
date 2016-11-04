@@ -29,12 +29,8 @@ module.exports = () => {
         resolveExpenses( req, res, next, expensesService().byOrigin );
     };
 
-    expensesController.byAreaDetail = ( req, res, next ) => {
-        resolveExpenses( req, res, next, expensesService().byAreaExpenseGroup );
-    };
-
-    expensesController.byOriginDetail = ( req, res, next ) => {
-        resolveExpenses( req, res, next, expensesService().byOriginExpenseGroup );
+    expensesController.detail = ( req, res, next ) => {
+        resolveExpenses( req, res, next, expensesService().byExpenseGroup );
     };
 
     return expensesController;
