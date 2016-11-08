@@ -1,4 +1,5 @@
 const expensesService = require( '../services/expenses' );
+const Promise = require( 'bluebird' );
 
 module.exports = () => {
     var expensesController = new Object();
@@ -12,9 +13,14 @@ module.exports = () => {
             return res.status( 400 ).send( 'O parâmetro year é obrigatório.' );
         }
 
-        serviceMethod( year, month, originId )
+        Promise.all( [
+            serviceMethod( year, month, originId ),
+            expensesService().lastUpdate()
+        ] )
         .then( result => {
-            return res.json( result );
+            result[ 0 ].lastUpdate = result[ 1 ];
+
+            return res.json( result[ 0 ] );
         } )
         .catch( err => {
             next( err );

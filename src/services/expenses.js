@@ -1,4 +1,8 @@
+const sql = require( 'mssql' );
 const elasticsearch = require( '../config/elasticsearch' );
+const sqlServerConfig = require( '../config/sqlServer' );
+const colorsConfig = require( '../config/colors' );
+const sqlTransparenciaConfig = sqlServerConfig.transparencia.sqlConnectionConfig;
 
 module.exports = () => {
     const expensesService = new Object();
@@ -112,10 +116,6 @@ module.exports = () => {
         return body;
     }
 
-    const colors = [ '#8BC34A', '#03A9F4', '#FFEB3B', '#FF5722', '#9C27B0', '#795548', '#E91E63', '#3F51B5', '#F44336', '#009688',
-                     '#2196F3', '#00BCD4', '#673AB7', '#4CAF50', '#DCE77', '#FFF9C4', '#FB8C00', '#FFB300', '#607D8B' ];
-    const othersColor = '#9E9E9E';
-
     function parseItems( buckets, labelField, keyField, total ) {
         let items = buckets.map( a => {
             const value = a.Pago.value + a.Rap.value;
@@ -134,7 +134,7 @@ module.exports = () => {
 
         items = items.map( ( a, i ) => {
             a.plot = i < 10;
-            a.color = a.plot ? colors[ i ] : othersColor;
+            a.color = a.plot ? colorsConfig.colors[ i ] : colorsConfig.othersColor;
             a.list = true;
 
             return a;
@@ -150,7 +150,7 @@ module.exports = () => {
                 value: othersValue,
                 percentage: Math.round( percentage ),
                 decimalPercentage: percentage,
-                color: othersColor,
+                color: colorsConfig.othersColor,
                 list: false,
                 plot: true
             } );
@@ -165,7 +165,6 @@ module.exports = () => {
         return {
             total: +total.toFixed( 2 ),
             items: parseItems( result.aggregations.group_by.buckets, labelField, keyField, total ),
-            lastUpdate: new Date(),
             info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
         };
     }
@@ -210,6 +209,23 @@ module.exports = () => {
         const id = originId.split( '_' )[ 1 ];
 
         return byExpenseGroup( year, month, keyField, id );
+    };
+
+    const connection = new sql.Connection( sqlTransparenciaConfig );
+    expensesService.lastUpdate = () => {
+        return connection.connect()
+            .then( conn => {
+                return new sql.Request( conn )
+                    .query( 'SELECT TOP 1 * FROM LogCarga WHERE cargaID = 53 ORDER BY logCargaID DESC' );
+            } )
+            .then( recordsets => {
+                connection.close();
+                return recordsets[ 0 ].dataInicio;
+            } )
+            .catch( err => {
+                connection.close();
+                return Promise.reject( err );
+            } );
     };
 
     return expensesService;
