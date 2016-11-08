@@ -1,10 +1,10 @@
 module.exports = {
     transparencia: {
         sqlConnectionConfig: {
-            user: process.env.DETRANNET_USER,
-            password: process.env.DETRANNET_PASSWORD,
-            server: process.env.DETRANNET_SERVER,
-            database: process.env.DETRANNET_DB,
+            user: process.env.TRANSPARENCIA_USER,
+            password: process.env.TRANSPARENCIA_PASSWORD,
+            server: process.env.TRANSPARENCIA_SERVER,
+            database: process.env.TRANSPARENCIA_DB,
             connectionTimeout: 15000,
             requestTimeout: 30000,
             pool: {
