@@ -26,7 +26,16 @@ module.exports = () => {
                 ],
                 'query': {
                     'bool': {
-                        'must': [ ]
+                        'must': [
+                            {
+                                'range': {
+                                    'data': {
+                                        'gte': from,
+                                        'lte': to
+                                    }
+                                }
+                            }
+                        ]
                     }
                 },
                 'aggs': {
@@ -89,17 +98,6 @@ module.exports = () => {
         if ( filter ) {
             body.query.bool.must.push( filter );
         }
-
-
-        body.query.bool.must.push(
-            {
-                'range': {
-                    'data': {
-                        'gte': from,
-                        'lte': to
-                    }
-                }
-            } );
 
         return body;
     }
