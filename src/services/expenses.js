@@ -10,13 +10,13 @@ module.exports = () => {
     /**
      *
      *
-     * @param {any} year
-     * @param {any} month
+     * @param {any} from
+     * @param {any} to
      * @param {any} groupBy
      * @param {any} filter
      * @returns
      */
-    function parseBody( year, month, groupBy, filter ) {
+    function parseBody( from, to, groupBy, filter ) {
 
         const body =
             {
@@ -26,15 +26,7 @@ module.exports = () => {
                 ],
                 'query': {
                     'bool': {
-                        'must': [
-                            {
-                                'term': {
-                                    'ano': {
-                                        'value': year
-                                    }
-                                }
-                            }
-                        ]
+                        'must': [ ]
                     }
                 },
                 'aggs': {
@@ -98,20 +90,16 @@ module.exports = () => {
             body.query.bool.must.push( filter );
         }
 
-        if ( month ) {
-            const beginDate = new Date( +year, +month - 1, 1 );
-            const endDate = new Date( +year, +month, 0 );
 
-            body.query.bool.must.push(
-                {
-                    'range': {
-                        'data': {
-                            'gte': beginDate,
-                            'lte': endDate
-                        }
+        body.query.bool.must.push(
+            {
+                'range': {
+                    'data': {
+                        'gte': from,
+                        'lte': to
                     }
-                } );
-        }
+                }
+            } );
 
         return body;
     }
@@ -169,7 +157,7 @@ module.exports = () => {
         };
     }
 
-    function byExpenseGroup( year, month, field, originId ) {
+    function byExpenseGroup( from, to, field, originId ) {
 
         const filter = {
             'term': new Object()
@@ -180,35 +168,35 @@ module.exports = () => {
         };
 
         return elasticsearch.client.search( {
-            index: `despesas${year}`,
-            body: parseBody( year, month, 'codigoGrupoDespesa', filter )
+            index: 'despesas',
+            body: parseBody( from, to, 'codigoGrupoDespesa', filter )
         } )
         .then( result => parseResult( result, 'grupoDespesa', 'codigoGrupoDespesa' ) );
     }
 
-    expensesService.byArea = ( year, month ) => {
+    expensesService.byArea = ( from, to ) => {
 
         return elasticsearch.client.search( {
-            index: `despesas${year}`,
-            body: parseBody( year, month, 'codigoFuncao' )
+            index: 'despesas',
+            body: parseBody( from, to, 'codigoFuncao' )
         } )
         .then( result => parseResult( result, 'funcao', 'codigoFuncao' ) );
     };
 
-    expensesService.byOrigin = ( year, month ) => {
+    expensesService.byOrigin = ( from, to ) => {
 
         return elasticsearch.client.search( {
-            index: `despesas${year}`,
-            body: parseBody( year, month, 'codigoUnidadeGestora' )
+            index: 'despesas',
+            body: parseBody( from, to, 'codigoUnidadeGestora' )
         } )
         .then( result => parseResult( result, 'unidadeGestora', 'codigoUnidadeGestora' ) );
     };
 
-    expensesService.byExpenseGroup = ( year, month, originId ) => {
+    expensesService.byExpenseGroup = ( from, to, originId ) => {
         const keyField = originId.split( '_' )[ 0 ];
         const id = originId.split( '_' )[ 1 ];
 
-        return byExpenseGroup( year, month, keyField, id );
+        return byExpenseGroup( from, to, keyField, id );
     };
 
     const connection = new sql.Connection( sqlTransparenciaConfig );

@@ -12,47 +12,51 @@ module.exports = () => {
         next( err );
     }
 
-    function validateParams( year, month, res, next ) {
-        if ( !year ) {
-            const err = new Error( 'O parâmetro year é obrigatório.' );
-            err.userMessage = 'O ano deve ser informado na consulta.';
-            err.handled = true;
-            err.status = 400;
+    function validateParams( from, to, res, next ) {
+        // if ( !year ) {
+        //     const err = new Error( 'O parâmetro year é obrigatório.' );
+        //     err.userMessage = 'O ano deve ser informado na consulta.';
+        //     err.handled = true;
+        //     err.status = 400;
 
-            next( err );
+        //     next( err );
 
-            return false;
-        }
+        //     return false;
+        // }
 
-        const currentYear = new Date().getFullYear();
-        if ( +year > currentYear || +year < 2004 ) {
-            const err = new Error( `O parâmetro year deve estar entre 2004 e ${currentYear}.` );
-            noDataForFilter( err, next );
+        // const currentYear = new Date().getFullYear();
+        // if ( +year > currentYear || +year < 2004 ) {
+        //     const err = new Error( `O parâmetro year deve estar entre 2004 e ${currentYear}.` );
+        //     noDataForFilter( err, next );
 
-            return false;
-        }
+        //     return false;
+        // }
 
-        if ( month && ( month < 1 || month > 12 ) ) {
-            const err = new Error( 'O parâmetro month deve estar entre 1 e 12.' );
-            noDataForFilter( err, next );
+        // if ( month && ( month < 1 || month > 12 ) ) {
+        //     const err = new Error( 'O parâmetro month deve estar entre 1 e 12.' );
+        //     noDataForFilter( err, next );
 
-            return false;
-        }
+        //     return false;
+        // }
 
         return true;
     }
 
     function resolveExpenses( req, res, next, serviceMethod ) {
-        const year = req.query.year;
-        const month = req.query.month;
+        //const year = req.query.year;
+        //const month = req.query.month;
         const originId = req.params.id;
 
-        if ( !validateParams( year, month, res, next ) ) {
+        const from = new Date( req.query.from );
+        let to = new Date( req.query.to );
+        to = new Date( to.getFullYear(), to.getMonth(), 0 );
+
+        if ( !validateParams( from, to, res, next ) ) {
             return;
         }
 
         Promise.all( [
-            serviceMethod( year, month, originId ),
+            serviceMethod( from, to, originId ),
             expensesService().lastUpdate()
             .catch( err => {
                 console.error( err );
