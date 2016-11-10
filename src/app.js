@@ -26,6 +26,7 @@ app.use( apiMiddleware( {
 
 // load our routes
 app = require( './routes/expenses' )( app );
+app = require( './routes/revenues' )( app );
 
 app.use( apiMiddleware( {
     error: {
