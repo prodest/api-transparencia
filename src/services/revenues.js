@@ -1,3 +1,4 @@
+require( '../stringExtensions' );
 const sql = require( 'mssql' );
 const sqlServerConfig = require( '../config/sqlServer' );
 const colorsConfig = require( '../config/colors' );
@@ -14,8 +15,8 @@ module.exports = () => {
 
             return {
                 originId: a[ keyField ],
-                label: a[ labelField ],
-                value: value,
+                label: a[ labelField ].titleCase(),
+                value: +value.toFixed( 2 ),
                 percentage: Math.round( percentage ),
                 decimalPercentage: percentage
             };

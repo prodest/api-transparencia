@@ -1,3 +1,4 @@
+require( '../stringExtensions' );
 const sql = require( 'mssql' );
 const elasticsearch = require( '../config/elasticsearch' );
 const sqlServerConfig = require( '../config/sqlServer' );
@@ -109,7 +110,7 @@ module.exports = () => {
 
             return {
                 originId: `${keyField}_${a.First.hits.hits[ 0 ]._source[ keyField ]}`,
-                label: a.First.hits.hits[ 0 ]._source[ labelField ].trim().toLowerCase(),
+                label: a.First.hits.hits[ 0 ]._source[ labelField ].titleCase(),
                 value: +value.toFixed( 2 ),
                 percentage: Math.round( percentage ),
                 decimalPercentage: percentage
