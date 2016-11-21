@@ -22,7 +22,7 @@ module.exports = () => {
             };
         } );
 
-        items = items.sort( ( a, b ) => b.value - a.value );
+        items = items.sort( ( a, b ) => b.decimalPercentage - a.decimalPercentage );
 
         items = items.map( ( a, i ) => {
             a.plot = i < 10;
@@ -32,7 +32,7 @@ module.exports = () => {
             return a;
         } );
 
-        const others = items.filter( a => !a.plot );
+        const others = items.filter( a => !a.plot && a.value > 0 );
         if ( others.length > 0 ) {
             const othersValue = others.reduce( ( total, curr ) => total + curr.value, 0 );
             const percentage = othersValue / total * 100;
