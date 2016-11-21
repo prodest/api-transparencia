@@ -11,22 +11,13 @@ let app = express();
 
 app.use( apiMiddleware( {
     compress: true,
-    cors: true,
-    // authentication: {
-    //     jwtPublicKey: config.jwtPublicKey
-    // },
-    // limit: {
-    //     max: 300,
-    //     duration: 10 * 60 * 1000,
-    //     perSecond: 10,
-    //     redisUrl: config.redisUrl,
-    //     apiId: 'api-transparencia'
-    // }
+    cors: true
 } ) );
 
 // load our routes
 app = require( './routes/expenses' )( app );
 app = require( './routes/revenues' )( app );
+app = require( './routes/budgets' )( app );
 
 app.use( apiMiddleware( {
     error: {
