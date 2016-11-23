@@ -114,7 +114,7 @@ module.exports = () => {
     };
 
     revenuesService.lastUpdate = () => {
-        return Promise.resolve( undefined );
+        return Promise.resolve( new Date() );
     };
 
     return revenuesService;
