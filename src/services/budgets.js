@@ -119,8 +119,8 @@ module.exports = () => {
                 const percentage = executedTotal / expectedTotal * 100;
 
                 return {
-                    expected: expectedTotal,
-                    executed: executedTotal,
+                    expected: +expectedTotal.toFixed( 2 ),
+                    executed: +executedTotal.toFixed( 2 ),
                     expectedColor: colorsConfig.deviationColors.expected,
                     executedColor: colorsConfig.deviationColors.executed,
                     percentage: Math.round( percentage ),
