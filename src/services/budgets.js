@@ -82,7 +82,24 @@ module.exports = () => {
             } );
     };
 
-    budgetsService.expectedByExecuted = ( year ) => {
+    function parseDeviationItems( buckets ) {
+
+        let items = buckets.map( a => {
+            const percentage = a.ValorPago / a.ValorOrcado * 100;
+
+            return {
+                label: a.UnidadeGestora.titleCase(),
+                expected: +a.ValorOrcado.toFixed( 2 ),
+                executed: +a.ValorPago.toFixed( 2 ),
+                percentage: Math.round( percentage ),
+                decimalPercentage: percentage
+            };
+        } );
+
+        return items.sort( ( a, b ) => a.label.localeCompare( b.value ) );
+    }
+
+    budgetsService.deviation = ( year ) => {
         return connection.connect()
             .then( conn => {
                 return new sql.Request( conn )
@@ -90,7 +107,7 @@ module.exports = () => {
                     .query( `SELECT
                                 doe.[UnidadeGestora],
                                 doe.[ValorOrcado],
-                                doe.[ValorPago] + doe.[ValorRap] AS ValorExecutado
+                                doe.[ValorPago]
                                 FROM [dbo].[DespesaOrcadaExecutada] AS doe
                                 WHERE YEAR(data) = @year` );
             } )
@@ -98,14 +115,18 @@ module.exports = () => {
                 connection.close();
 
                 const expectedTotal = recordsets.reduce( ( total, curr ) => total + curr.ValorOrcado, 0 );
-                const executedTotal = recordsets.reduce( ( total, curr ) => total + curr.ValorExecutado, 0 );
+                const executedTotal = recordsets.reduce( ( total, curr ) => total + curr.ValorPago, 0 );
+                const percentage = executedTotal / expectedTotal * 100;
 
                 return {
-                    total: {
-                        expectedValue: expectedTotal,
-                        executedValue: executedTotal
-                    },
-                    items: []
+                    expected: expectedTotal,
+                    executed: executedTotal,
+                    expectedColor: colorsConfig.deviation.expected,
+                    executedColor: colorsConfig.deviation.executed,
+                    percentage: Math.round( percentage ),
+                    decimalPercentage: percentage,
+                    items: parseDeviationItems( recordsets ),
+                    info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
                 };
             } )
             .catch( err => {
@@ -115,7 +136,7 @@ module.exports = () => {
     };
 
     budgetsService.lastUpdate = () => {
-        return Promise.resolve( undefined );
+        return Promise.resolve( new Date() );
     };
 
     return budgetsService;
