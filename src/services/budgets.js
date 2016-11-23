@@ -121,8 +121,8 @@ module.exports = () => {
                 return {
                     expected: expectedTotal,
                     executed: executedTotal,
-                    expectedColor: colorsConfig.deviation.expected,
-                    executedColor: colorsConfig.deviation.executed,
+                    expectedColor: colorsConfig.deviationColors.expected,
+                    executedColor: colorsConfig.deviationColors.executed,
                     percentage: Math.round( percentage ),
                     decimalPercentage: percentage,
                     items: parseDeviationItems( recordsets ),
