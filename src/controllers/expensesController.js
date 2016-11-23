@@ -26,15 +26,15 @@ module.exports = () => {
                 return undefined;
             } )
         ] )
-        .then( result => {
-            if ( result[ 0 ].items.length === 0 ) {
+        .then( ( [ result, lastUpdate ] ) => {
+            if ( result.items.length === 0 ) {
                 const err = new Error( 'Não existem dados para o período consultado.' );
                 return noDataForFilter( err, next );
             }
 
-            result[ 0 ].lastUpdate = result[ 1 ];
+            result.lastUpdate = lastUpdate;
 
-            return res.json( result[ 0 ] );
+            return res.json( result );
         } )
         .catch( err => {
             next( err );
