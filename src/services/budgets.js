@@ -85,7 +85,7 @@ module.exports = () => {
     function parseDeviationItems( buckets ) {
 
         let items = buckets.map( a => {
-            const percentage = a.ValorPago / a.ValorOrcado * 100;
+            const percentage = a.ValorOrcado ? a.ValorPago / a.ValorOrcado * 100 : 0;
 
             return {
                 label: a.UnidadeGestora.titleCase(),
