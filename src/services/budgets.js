@@ -96,7 +96,7 @@ module.exports = () => {
             };
         } );
 
-        return items.sort( ( a, b ) => a.label.localeCompare( b.value ) );
+        return items.sort( ( a, b ) => a.label.localeCompare( b.label ) );
     }
 
     budgetsService.deviation = ( year ) => {
