@@ -26,9 +26,9 @@ module.exports = () => {
         items = items.sort( ( a, b ) => b.value - a.value );
 
         items = items.map( ( a, i ) => {
+            a.plot = i < 10;
             a.color = a.plot ? colorsConfig.colors[ i ] : colorsConfig.othersColor;
             a.list = true;
-            a.plot = i < 10;
 
             return a;
         } );
