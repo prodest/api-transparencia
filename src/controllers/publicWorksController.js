@@ -37,9 +37,9 @@ module.exports = () => {
         } );
     }
 
-    publicWorksController.districts = ( req, res, next ) => {
+    publicWorksController.byCity = ( req, res, next ) => {
 
-        return resolvePublicWorks( req, res, next, publicWorksService().districts );
+        return resolvePublicWorks( req, res, next, publicWorksService().byCity );
     };
 
     return publicWorksController;

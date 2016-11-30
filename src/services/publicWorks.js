@@ -54,7 +54,7 @@ module.exports = () => {
         return items.sort( ( a, b ) => a.label.localeCompare( b.label ) );
     }
 
-    publickWorksService.districts = ( year ) => {
+    publickWorksService.byCity = ( year ) => {
 
         return connection.connect()
             .then( conn => {

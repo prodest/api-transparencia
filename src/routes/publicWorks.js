@@ -4,7 +4,7 @@ module.exports = app => {
 
     const publicWorksController = require( '../controllers/publicWorksController' )();
 
-    app.get( '/public-works/districts', apicache( '1 second' ), publicWorksController.districts );
+    app.get( '/public-works/by-city', apicache( '1 hour' ), publicWorksController.byCity );
 
     return app;
 };
