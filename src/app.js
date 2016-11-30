@@ -18,6 +18,7 @@ app.use( apiMiddleware( {
 app = require( './routes/expenses' )( app );
 app = require( './routes/revenues' )( app );
 app = require( './routes/budgets' )( app );
+app = require( './routes/publicWorks' )( app );
 
 app.use( apiMiddleware( {
     error: {
