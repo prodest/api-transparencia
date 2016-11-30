@@ -12,10 +12,9 @@ module.exports = () => {
     }
 
     function resolvePublicWorks( req, res, next, serviceMethod ) {
-        const year = req.query.year;
 
         Promise.all( [
-            serviceMethod( year ),
+            serviceMethod,
             publicWorksService().lastUpdate()
             .catch( err => {
                 console.error( err );
@@ -38,8 +37,16 @@ module.exports = () => {
     }
 
     publicWorksController.byCity = ( req, res, next ) => {
+        const year = req.query.year;
 
-        return resolvePublicWorks( req, res, next, publicWorksService().byCity );
+        return resolvePublicWorks( req, res, next, publicWorksService().byCity( year ) );
+    };
+
+    publicWorksController.list = ( req, res, next ) => {
+        const year = req.query.year;
+        const cityId = req.query.cityId;
+
+        return resolvePublicWorks( req, res, next, publicWorksService().list( cityId, year ) );
     };
 
     return publicWorksController;
