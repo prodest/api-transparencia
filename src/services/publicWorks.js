@@ -123,10 +123,14 @@ module.exports = () => {
             const value = a[ valueField ];
             const percentage = value / total * 100;
             let label = a[ labelField ].titleCase();
-            let status = ( a[ statusField ] || '' ).split( ' ' )[ 0 ];
+            let status = a[ statusField ] || '';
 
-            if ( label.length > 140 ) {
-                label = label.split( 140 ) + '...';
+            if ( label.length > 100 ) {
+                label = label.split( 100 ) + '...';
+            }
+
+            if ( status.length > 15 ) {
+                status = status.split( ' ' )[ 0 ];
             }
 
             return {
