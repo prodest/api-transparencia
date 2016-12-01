@@ -126,7 +126,7 @@ module.exports = () => {
             let status = a[ statusField ] || '';
 
             if ( label.length > 100 ) {
-                label = label.split( 100 ) + '...';
+                label = label.substring( 0, 100 ) + '...';
             }
 
             if ( status.length > 15 ) {
