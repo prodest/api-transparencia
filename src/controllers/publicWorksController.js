@@ -49,5 +49,17 @@ module.exports = () => {
         return resolvePublicWorks( req, res, next, publicWorksService().list( cityId, year ) );
     };
 
+    publicWorksController.detail = ( req, res, next ) => {
+        const id = req.params.id;
+
+        return publicWorksService().detail( id )
+        .then( result => {
+            return res.json( result );
+        } )
+        .catch( err => {
+            next( err );
+        } );
+    };
+
     return publicWorksController;
 };

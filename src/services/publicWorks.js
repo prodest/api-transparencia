@@ -1,7 +1,13 @@
 require( '../stringExtensions' );
+
 const sql = require( 'mssql' );
+const Promise = require( 'bluebird' );
+const request = require( 'request-promise' );
+
 const sqlServerConfig = require( '../config/sqlServer' );
 const colorsConfig = require( '../config/colors' );
+const transparenciaConfig = require( '../config/portal-transparencia' );
+
 const sqlTransparenciaConfig = sqlServerConfig.transparencia.sqlConnectionConfig;
 
 module.exports = () => {
@@ -229,6 +235,42 @@ module.exports = () => {
             .catch( err => {
                 connection.close();
                 return Promise.reject( err );
+            } );
+    };
+
+    publickWorksService.detail = ( id ) => {
+        const uriDetail = `${transparenciaConfig.baseUrl}${transparenciaConfig.obrasDetalhe}${id}`;
+        const uriHistory = `${transparenciaConfig.baseUrl}${transparenciaConfig.obrasHistorico}${id}`;
+
+        const detail = {
+            uri: uriDetail,
+            headers: {
+                'User-Agent': 'Request-Promise',
+                'Authorization': transparenciaConfig.authorization
+            },
+            json: true
+        };
+
+        const history = {
+            uri: uriHistory,
+            headers: {
+                'User-Agent': 'Request-Promise',
+                'Authorization': transparenciaConfig.authorization
+            },
+            json: true
+        };
+
+        return request( detail )
+            .then( detail => {
+                return {
+                    origin: detail.InfoObra.Orgao.split( '-' )[ 0 ],
+                    label: detail.InfoObra.Descricao,
+                    type: detail.InfoObra.TipoObra,
+                    city: detail.InfoObra.Municipio,
+                    value: detail.InfoExecucao.ValorTotal,
+                    date: detail.InfoContrato.DtContrato,
+                    status: detail.InfoExecucao.Situacao
+                };
             } );
     };
 
