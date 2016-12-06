@@ -124,19 +124,25 @@ module.exports = () => {
             } );
     };
 
+    function parseStatus( status ) {
+        status = status || '';
+
+        if ( status.length > 15 ) {
+            status = status.split( ' ' )[ 0 ];
+        }
+
+        return status;
+    }
+
     function parseListItems( result, idField, labelField, statusField, valueField, total ) {
         let items = result.map( a => {
             const value = a[ valueField ];
             const percentage = value / total * 100;
             let label = a[ labelField ].titleCase();
-            let status = a[ statusField ] || '';
+            let status = parseStatus( a[ statusField ] );
 
             if ( label.length > 100 ) {
                 label = label.substring( 0, 100 ) + '...';
-            }
-
-            if ( status.length > 15 ) {
-                status = status.split( ' ' )[ 0 ];
             }
 
             return {
@@ -270,7 +276,8 @@ module.exports = () => {
                     city: detail.InfoObra.Municipio,
                     value: detail.InfoExecucao.ValorTotal,
                     date: detail.InfoContrato.DtContrato,
-                    status: detail.InfoExecucao.Situacao
+                    status: parseStatus( detail.InfoExecucao.Situacao ),
+                    fullStatus: detail.InfoExecucao.Situacao
                 };
             } );
     };
