@@ -4,6 +4,7 @@ const sql = require( 'mssql' );
 const Promise = require( 'bluebird' );
 const request = require( 'request-promise' );
 
+const lastUpdateService = require( './lastUpdate' );
 const sqlServerConfig = require( '../config/sqlServer' );
 const colorsConfig = require( '../config/colors' );
 const transparenciaConfig = require( '../config/portal-transparencia' );
@@ -283,7 +284,7 @@ module.exports = () => {
     };
 
     publickWorksService.lastUpdate = () => {
-        return Promise.resolve( new Date() );
+        return lastUpdateService().byArea( 'Obra' );
     };
 
     return publickWorksService;

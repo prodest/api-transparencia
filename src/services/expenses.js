@@ -1,9 +1,8 @@
 require( '../stringExtensions' );
-const sql = require( 'mssql' );
+
+const lastUpdateService = require( './lastUpdate' );
 const elasticsearch = require( '../config/elasticsearch' );
-const sqlServerConfig = require( '../config/sqlServer' );
 const colorsConfig = require( '../config/colors' );
-const sqlTransparenciaConfig = sqlServerConfig.transparencia.sqlConnectionConfig;
 
 module.exports = () => {
     const expensesService = new Object();
@@ -198,21 +197,8 @@ module.exports = () => {
         return byExpenseGroup( from, to, keyField, id );
     };
 
-    const connection = new sql.Connection( sqlTransparenciaConfig );
     expensesService.lastUpdate = () => {
-        return connection.connect()
-            .then( conn => {
-                return new sql.Request( conn )
-                    .query( 'SELECT TOP 1 * FROM LogCarga WHERE cargaID = 53 ORDER BY logCargaID DESC' );
-            } )
-            .then( recordsets => {
-                connection.close();
-                return recordsets[ 0 ].dataInicio;
-            } )
-            .catch( err => {
-                connection.close();
-                return Promise.reject( err );
-            } );
+        return lastUpdateService().byArea( 'Despesa' );
     };
 
     return expensesService;

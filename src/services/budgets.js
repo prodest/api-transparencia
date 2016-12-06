@@ -1,7 +1,10 @@
 require( '../stringExtensions' );
 const sql = require( 'mssql' );
+
+const lastUpdateService = require( './lastUpdate' );
 const sqlServerConfig = require( '../config/sqlServer' );
 const colorsConfig = require( '../config/colors' );
+
 const sqlTransparenciaConfig = sqlServerConfig.transparencia.sqlConnectionConfig;
 
 module.exports = () => {
@@ -136,7 +139,7 @@ module.exports = () => {
     };
 
     budgetsService.lastUpdate = () => {
-        return Promise.resolve( new Date() );
+        return lastUpdateService().byArea( 'OrcamentoExecucao' );
     };
 
     return budgetsService;
