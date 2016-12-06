@@ -186,7 +186,7 @@ module.exports = () => {
                     .input( 'year', sql.Int, year )
                     .input( 'cityId', sql.Int, cityId )
                     .query( `select
-                                obra.OBJETO as descricao,
+                                obra.BEMPUBLICO as descricao,
                                 situacao.DESCRICAO as situacao,
                                 muni.MUN_NOME as municipio,
                                 ISNULL(obra.VALORINICIAL,0) + ISNULL(aditamento.valoraditado, 0) as valor,
@@ -264,7 +264,8 @@ module.exports = () => {
             .then( detail => {
                 return {
                     origin: detail.InfoObra.Orgao.split( '-' )[ 0 ],
-                    label: detail.InfoObra.Descricao,
+                    label: detail.InfoObra.Descricao.titleCase(),
+                    description: detail.InfoObra.Objeto.titleCase(),
                     type: detail.InfoObra.TipoObra,
                     city: detail.InfoObra.Municipio,
                     value: detail.InfoExecucao.ValorTotal,
