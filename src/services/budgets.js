@@ -101,12 +101,14 @@ module.exports = () => {
             };
         } );
 
+        items = items.sort( ( a, b ) => b.percentage - a.percentage );
+
         return items;
     }
 
     budgetsService.deviation = ( year ) => {
-        const info = 'Nesta consulta é exibida uma comparação entre os valores orçados e executados por cada Órgão do do Governo do Estado.';        
-        
+        const info = 'Nesta consulta é exibida uma comparação entre os valores orçados e executados por cada Órgão do do Governo do Estado.';
+
         return connection.connect()
             .then( conn => {
                 return new sql.Request( conn )
