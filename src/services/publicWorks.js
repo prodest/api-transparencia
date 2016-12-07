@@ -58,7 +58,7 @@ module.exports = () => {
             } );
         }
 
-        return items.sort( ( a, b ) => a.label.localeCompare( b.label ) );
+        return items;
     }
 
     publickWorksService.byCity = ( year ) => {
@@ -116,7 +116,7 @@ module.exports = () => {
                     total: +total.toFixed( 2 ),
                     quantity: +quantityTotal.toFixed( 2 ),
                     items: parseDistrictItems( recordsets, 'id', 'municipio', 'valor', 'quantidade', total ),
-                    info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
+                    info: 'Nesta consulta são exibidas as obras realizadas pelo Governo do Estado em cada município, bem como os valores e detalhes sobre a execução.'
                 };
             } )
             .catch( err => {
@@ -236,7 +236,7 @@ module.exports = () => {
                     city: recordsets[ 0 ].municipio,
                     total: +total.toFixed( 2 ),
                     items: parseListItems( recordsets, 'id', 'descricao', 'situacao', 'valor', total ),
-                    info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
+                    info: 'Nesta consulta são exibidas as obras realizadas pelo Governo do Estado em cada município, bem como os valores e detalhes sobre a execução.'
                 };
             } )
             .catch( err => {

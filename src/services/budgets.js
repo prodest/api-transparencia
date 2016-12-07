@@ -53,17 +53,19 @@ module.exports = () => {
         return items;
     }
 
-    function parseResult( result, labelField, valueField ) {
+    function parseResult( result, labelField, valueField, info ) {
         const total = result.reduce( ( total, curr ) => total + curr[ valueField ], 0 );
 
         return {
             total: +total.toFixed( 2 ),
             items: parseItems( result, labelField, valueField, total ),
-            info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
+            info: info || 'Nesta consulta são exibidos os valores orçados pelo Estado, agregados por seus respectivos órgãos.'
         };
     }
 
     budgetsService.expected = ( year ) => {
+
+        const info = 'Nesta consulta são exibidos os valores orçados pelo Estado, agregados por seus respectivos órgãos.';
 
         return connection.connect()
             .then( conn => {
@@ -77,7 +79,7 @@ module.exports = () => {
             } )
             .then( recordsets => {
                 connection.close();
-                return parseResult( recordsets, 'UnidadeGestora', 'ValorOrcado' );
+                return parseResult( recordsets, 'UnidadeGestora', 'ValorOrcado', info );
             } )
             .catch( err => {
                 connection.close();
@@ -99,10 +101,12 @@ module.exports = () => {
             };
         } );
 
-        return items.sort( ( a, b ) => a.label.localeCompare( b.label ) );
+        return items;
     }
 
     budgetsService.deviation = ( year ) => {
+        const info = 'Nesta consulta é exibida uma comparação entre os valores orçados e executados por cada Órgão do do Governo do Estado.';        
+        
         return connection.connect()
             .then( conn => {
                 return new sql.Request( conn )
@@ -129,7 +133,7 @@ module.exports = () => {
                     percentage: Math.round( percentage ),
                     decimalPercentage: percentage,
                     items: parseDeviationItems( recordsets ),
-                    info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
+                    info: info
                 };
             } )
             .catch( err => {

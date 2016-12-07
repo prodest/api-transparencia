@@ -60,7 +60,7 @@ module.exports = () => {
         return {
             total: +total.toFixed( 2 ),
             items: parseItems( result, keyField, labelField, valueField, total ),
-            info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
+            info: 'Nesta consulta são exibidos os valores arrecadados pelo Estado, agregados por seus respectivos órgãos.'
         };
     }
 

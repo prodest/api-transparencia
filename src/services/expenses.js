@@ -145,13 +145,13 @@ module.exports = () => {
         return items;
     }
 
-    function parseResult( result, labelField, keyField ) {
+    function parseResult( result, labelField, keyField, info ) {
         const total = result.aggregations.PagoTotal.value + result.aggregations.RapTotal.value;
 
         return {
             total: +total.toFixed( 2 ),
             items: parseItems( result.aggregations.group_by.buckets, labelField, keyField, total ),
-            info: 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
+            info: info || 'Os valores recebidos correspondem ao que o fornecedor recebeu pela prestação do serviço ou entrega do produto, somando o valor pago neste exercício e o pago em restos a pagar.'
         };
     }
 
@@ -174,20 +174,24 @@ module.exports = () => {
 
     expensesService.byArea = ( from, to ) => {
 
+        const info = 'Nesta consulta é exibido o total gasto pelo Governo do Estado em cada área de atuação, por exemplo, Saúde, Educação, Segurança Pública, etc. O valor apresentado representa o valor pago no exercício mais o valor pago em restos a pagar.';
+
         return elasticsearch.client.search( {
             index: 'despesas',
             body: parseBody( from, to, 'codigoFuncao' )
         } )
-        .then( result => parseResult( result, 'funcao', 'codigoFuncao' ) );
+        .then( result => parseResult( result, 'funcao', 'codigoFuncao', info ) );
     };
 
     expensesService.byOrigin = ( from, to ) => {
+
+        const info = 'Nesta consulta é exibido o total gasto por cada Órgão do Governo do Estado. O valor apresentado representa o valor pago no exercício mais o valor pago em restos a pagar.';
 
         return elasticsearch.client.search( {
             index: 'despesas',
             body: parseBody( from, to, 'codigoUnidadeGestora' )
         } )
-        .then( result => parseResult( result, 'unidadeGestora', 'codigoUnidadeGestora' ) );
+        .then( result => parseResult( result, 'unidadeGestora', 'codigoUnidadeGestora', info ) );
     };
 
     expensesService.byExpenseGroup = ( from, to, originId ) => {
