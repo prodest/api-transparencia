@@ -272,7 +272,7 @@ module.exports = () => {
                     origin: detail.InfoObra.Orgao.split( '-' )[ 0 ],
                     label: detail.InfoObra.Descricao.titleCase(),
                     description: detail.InfoObra.Objeto.titleCase(),
-                    type: detail.InfoObra.TipoObra,
+                    estimate: detail.InfoExecucao.PrazoTotal,
                     city: detail.InfoObra.Municipio,
                     value: detail.InfoExecucao.ValorTotal,
                     date: detail.InfoContrato.DtContrato,
