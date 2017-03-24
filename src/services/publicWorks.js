@@ -78,23 +78,15 @@ module.exports = () => {
                             select COUNT(1) as quantidade,
                                             SUM(obra.VALORINICIAL) as valorinicial,
                                             obra.MUN_CODIGO,
-                                            obra.IDCONTRATO,
-                                            situacao.CODIGO_OBRA_SITUACAO_TIPO
+                                            obra.IDCONTRATO
+                                        
                                         from Obras_Obra obra
                                         inner join Obras_Contrato cont 
                                             on obra.IDCONTRATO = cont.IDCONTRATO		        
-                                        inner join (select IDOBRA, CODIGO_OBRA_SITUACAO_TIPO
-                                                from Obras_SituacaoObra A
-                                                where CODIGO_OBRA_SITUACAO in (select MAX(CODIGO_OBRA_SITUACAO)
-                                                                                from Obras_SituacaoObra B
-                                                                                where A.IDOBRA = B.IDOBRA
-                                                                                group by IDOBRA)) as situacao
-                                            on obra.IDOBRA = situacao.IDOBRA
                                             
                                         where cont.ANOCONTRATO = @year
-                                        group by obra.MUN_CODIGO, obra.IDCONTRATO, situacao.CODIGO_OBRA_SITUACAO_TIPO
-                                        
-                                        
+                                        group by obra.MUN_CODIGO, obra.IDCONTRATO
+
                                         ) AS obra 
                                             on obra.MUN_CODIGO = muni.MUN_CODIGO
 
