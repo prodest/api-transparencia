@@ -11,7 +11,8 @@ let app = express();
 
 app.use( apiMiddleware( {
     compress: true,
-    cors: true
+    cors: true,
+    log: true
 } ) );
 
 // load our routes
