@@ -12,7 +12,9 @@ let app = express();
 app.use( apiMiddleware( {
     compress: true,
     cors: true,
-    log: true
+    log: {
+        elasticSearchUrl: process.env.ELASTICSEARCH_LOG
+    }
 } ) );
 
 // load our routes
