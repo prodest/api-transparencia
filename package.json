@@ -22,8 +22,8 @@
     "elasticsearch": "^12.0.1",
     "express": "^4.14.0",
     "mssql": "^3.3.0",
-    "newrelic": "^1.28.1",
-    "node-mw-api-prodest": "^1.6.1",
+    "newrelic": "^5.5.0",
+    "node-mw-api-prodest": "^1.7.0",
     "request-promise": "^4.1.1"
   },
   "devDependencies": {
