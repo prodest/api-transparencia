@@ -14,12 +14,11 @@
             "runtimeArgs": [
                 "--nolazy"
             ],
+            "envFile": "${workspaceFolder}/.env",
             "env": {
                 "NODE_ENV": "development"
             },
-            "externalConsole": false,
-            "sourceMaps": false,
-            "outDir": null
+            "sourceMaps": false
         },
         {
             "name": "Attach",
