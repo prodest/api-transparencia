@@ -8,7 +8,7 @@ module.exports = () => {
         const err = new Error( 'Não existem dados para o período consultado.' );
         err.userMessage = 'Não existem dados para o período consultado.';
         err.handled = true;
-        err.status = 500;
+        err.status = 400;
 
         next( err );
     }
